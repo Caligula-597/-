@@ -1,0 +1,151 @@
+这一次比上一版更接近正确，因为你已经把关键数据都存下来了：
+
+r_rel_lab
+delta_u_lab
+basis
+
+这说明你已经把“修正所需的信息”准备好了。
+
+但是——核心问题还没有真正修好。
+
+现在的问题在哪里
+
+你在 postprocess_frames(...) 里虽然取了
+
+basis0 = f0["basis"]
+
+但后面根本没有用它。
+
+你现在实际做的是：
+
+du0 = f0["delta_u_lab"]
+x0 = f0["r_rel_lab"]
+
+du_t = ft["delta_u_lab"]
+x_t = ft["r_rel_lab"]
+
+num = mean(sum(du0 * du_t, ...))
+dr = x_t - x0
+
+也就是说，你现在是在实验室坐标系里直接比较两个时刻的：
+
+相对位置 r_rel_lab
+connected fluctuation delta_u_lab
+
+这仍然会把整体 flock 的全局转向/整体旋转混进来。
+
+这版到底改到了什么程度
+已经修好的部分
+你不再只存每帧自己的 r_rot / delta_u_rot 了
+你已经把正确修复所需的 lab-frame + basis 都存下来了
+
+这一步是对的。
+
+还没修好的部分
+
+你还没有做到：
+
+对每个 origin 
+𝑡
+0
+t
+0
+	​
+
+，把 
+𝑡
+0
+t
+0
+	​
+
+ 和 
+𝑡
+0
++
+𝜏
+t
+0
+	​
+
++τ 的量都投到同一个 origin basis 
+𝐵
+0
+B
+0
+	​
+
+ 里比较
+
+这才是我们真正要的统一坐标系。
+
+为什么现在仍然不对
+
+因为实验二里：
+
+tau_rel 需要去掉整体 flock 转向
+tau_cage 更需要去掉整体刚体转动
+
+如果你直接用 r_rel_lab(t+\tau) - r_rel_lab(t)，那么哪怕 flock 只是整体绕质心转了一个角度、内部结构没变，dr 也会很大。
+这样 MSDrel 会被虚假抬高，于是 tau_cage 会假小。
+
+这正好就是你前面看到的那种症状。
+所以这版虽然比上一版好，但本质 bug 还在。
+
+正确写法是什么
+
+你现在只需要改 postprocess_frames(...) 这一段。
+
+把这里：
+
+du0 = f0["delta_u_lab"]
+x0 = f0["r_rel_lab"]
+basis0 = f0["basis"]
+
+den0 = float(np.mean(np.sum(du0 * du0, axis=1)))
+den0 = max(den0, exp_cfg.eps)
+
+for lag in lags:
+    ft = frames[int(t0 + lag)]
+
+    qn = neighbor_overlap_fraction(nbr0, ft["nbr_idx"])
+    qn_vals[int(lag)].append(qn)
+
+    du_t = ft["delta_u_lab"]
+    num = float(np.mean(np.sum(du0 * du_t, axis=1)))
+    cdelta = num / den0
+    cdelta_vals[int(lag)].append(cdelta)
+
+    x_t = ft["r_rel_lab"]
+    dr = x_t - x0
+    msd = float(np.mean(np.sum(dr * dr, axis=1)))
+    msd_vals[int(lag)].append(msd)
+
+替换成：
+
+B0 = f0["basis"]
+
+# express origin quantities in the origin basis
+x0 = f0["r_rel_lab"] @ B0.T
+du0 = f0["delta_u_lab"] @ B0.T
+
+den0 = float(np.mean(np.sum(du0 * du0, axis=1)))
+den0 = max(den0, exp_cfg.eps)
+
+for lag in lags:
+    ft = frames[int(t0 + lag)]
+
+    qn = neighbor_overlap_fraction(nbr0, ft["nbr_idx"])
+    qn_vals[int(lag)].append(qn)
+
+    # express t0+tau quantities in the SAME origin basis
+    x_t = ft["r_rel_lab"] @ B0.T
+    du_t = ft["delta_u_lab"] @ B0.T
+
+    num = float(np.mean(np.sum(du0 * du_t, axis=1)))
+    cdelta = num / den0
+    cdelta_vals[int(lag)].append(cdelta)
+
+    dr = x_t - x0
+    msd = float(np.mean(np.sum(dr * dr, axis=1)))
+    msd_vals[int(lag)].append(msd)

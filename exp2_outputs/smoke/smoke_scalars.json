@@ -1,0 +1,15 @@
+{
+  "N": 256,
+  "k": 7,
+  "q_inf": 0.027450980392156862,
+  "ell_nn2": 0.2635829634964466,
+  "phi_mean": 0.7460873275995255,
+  "tau_rw": 244.42352788248328,
+  "tau_rw_1e": 338.37146493366544,
+  "tau_rw_window_limited": false,
+  "tau_rel": 12.408156045582643,
+  "tau_rel_1e": 0.9617053438656274,
+  "tau_rel_window_limited": false,
+  "tau_cage": 28.3818920477734,
+  "tau_cage_window_limited": false
+}
