@@ -1,0 +1,52 @@
+{
+  "config": {
+    "rho": 1.0,
+    "v0": 0.05,
+    "dt": 1.0,
+    "include_self_in_alignment": false,
+    "burnin_steps": 5000,
+    "sample_stride": 50,
+    "n_samples": 160,
+    "seed_batch_size_1024": 8,
+    "seed_batch_size_2048": 4,
+    "corr_nbins": 32,
+    "corr_sample_size": 512,
+    "corr_num_frames": 8,
+    "corr_rmax_fraction": 0.5,
+    "bootstrap_reps": 2000,
+    "valley_side_points": 2,
+    "output_dir": "results_exp3_gpu_jax",
+    "resume": true,
+    "require_gpu": true
+  },
+  "N_list": [
+    1024
+  ],
+  "k_list": [
+    5,
+    7,
+    9,
+    12
+  ],
+  "D_coarse": [
+    0.005,
+    0.02,
+    0.05,
+    0.0738,
+    0.1,
+    0.15
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "jax_devices": [
+    "gpu:NVIDIA GeForce RTX 5090"
+  ]
+}
