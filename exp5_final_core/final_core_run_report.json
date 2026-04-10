@@ -1,0 +1,20 @@
+{
+  "devices": "gpu:NVIDIA GeForce RTX 5090",
+  "paths": {
+    "run_1024": "/root/autodl-tmp/exp5_final_core/run_1024",
+    "run_2048_lowk_manual": "/root/autodl-tmp/exp5_final_core/run_2048_lowk_manual"
+  },
+  "notes": [
+    "This final core script intentionally excludes tau_rw from execution.",
+    "N=1024 uses automatic count matching.",
+    "N=2048 low-k uses final manual golden radii overrides."
+  ],
+  "final_outputs": {
+    "summary": "/root/autodl-tmp/exp5_final_core/summary_all_final_core.csv",
+    "curves": "/root/autodl-tmp/exp5_final_core/curves_all_final_core.csv",
+    "raw": "/root/autodl-tmp/exp5_final_core/raw_all_final_core.csv",
+    "core_review_table": "/root/autodl-tmp/exp5_final_core/core_review_table.csv",
+    "core_review_report_json": "/root/autodl-tmp/exp5_final_core/core_review_report.json",
+    "core_review_report_md": "/root/autodl-tmp/exp5_final_core/core_review_report.md"
+  }
+}

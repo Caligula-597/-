@@ -1,0 +1,67 @@
+{
+  "N": 1024,
+  "k": 5,
+  "match_method": "count",
+  "L": 10.079368399158984,
+  "Rk": 0.8024114967626073,
+  "topological_preview_Dopt": 0.07,
+  "metric_preview_Dopt": 0.01,
+  "count_match_reference_D_initial": [
+    0.07
+  ],
+  "count_match_reference_D_final": [
+    0.06,
+    0.07
+  ],
+  "length_match_reference_D": 0.07,
+  "calibration": {
+    "R": 0.8024114967626073,
+    "target_k": 5.0,
+    "matched_mean_degree": 4.98095703125,
+    "match_method": "count",
+    "reference_D_values": [
+      0.06,
+      0.07
+    ],
+    "calibration_mode": "count_dynamic",
+    "manual_override_used": false
+  },
+  "D_grid": [
+    0.005,
+    0.006667,
+    0.008333,
+    0.01,
+    0.011667,
+    0.013333,
+    0.015,
+    0.016667,
+    0.018333,
+    0.02,
+    0.021667,
+    0.023333,
+    0.025,
+    0.03,
+    0.04,
+    0.05,
+    0.055,
+    0.0575,
+    0.06,
+    0.0625,
+    0.065,
+    0.0675,
+    0.07,
+    0.0725,
+    0.075,
+    0.0775,
+    0.08,
+    0.0825,
+    0.085,
+    0.09,
+    0.1,
+    0.12,
+    0.14,
+    0.16,
+    0.18,
+    0.2
+  ]
+}
